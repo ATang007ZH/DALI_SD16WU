@@ -1,0 +1,343 @@
+<!DOCTYPE CrossStudio_Project_File>
+<solution Name="sd16wu" target="8" version="2">
+  <configuration
+    Name="Debug"
+    c_preprocessor_definitions="DEBUG"
+    gcc_debugging_level="Level 3"
+    gcc_omit_frame_pointer="Yes"
+    gcc_optimization_level="None" />
+  <configuration
+    Name="Release"
+    c_preprocessor_definitions="NDEBUG"
+    gcc_debugging_level="Level 2"
+    gcc_omit_frame_pointer="Yes"
+    gcc_optimization_level="Level 2 balanced" />
+  <project Name="sd16wu">
+    <configuration
+      IOT2Proj="Yes"
+      LIBRARY_IO_TYPE="RTT"
+      Name="Common"
+      SEGGER2Proj="Yes"
+      arm_architecture="v7EM"
+      arm_compiler_variant="SEGGER"
+      arm_core_type="Cortex-M4"
+      arm_endian="Little"
+      arm_fp_abi="SoftFP"
+      arm_fpu_type="FPv4-SP-D16"
+      arm_linker_allow_multiple_definition="No"
+      arm_linker_heap_size="1280"
+      arm_linker_process_stack_size="0"
+      arm_linker_stack_size="1024"
+      arm_linker_variant="SEGGER"
+      arm_target_device_name="GD32F450IK"
+      arm_target_interface_type="SWD"
+      build_intermediate_directory="$(ProjectDir)/Output/$(Configuration)/Obj"
+      build_output_directory="$(ProjectDir)/Output/$(Configuration)"
+      c_only_additional_options="-Wmissing-prototypes"
+      c_preprocessor_definitions="USE_RTT=1;GD32F450;__GD32F4xx_FAMILY;__GD32F450_SUBFAMILY;ARM_MATH_CM4;HXTAL_VALUE=25000000;__MEMORY_INIT;IP_SUPPORT_IPV6=1;RTT_USE_ASM=1"
+      c_user_include_directories="$(PackagesDir)/ESPRO/;$(ProjectDir)/OS/Setup/CoreSupport/;$(ProjectDir)/OS/Setup/DeviceSupport/;$(ProjectDir)/OS/Setup/;$(ProjectDir)/GUI/Setup/;$(ProjectDir)/GD32F4xx_standard_peripheral/Include/"
+      debug_register_definition_file="$(ProjectDir)/OS/Setup/GD32F4xx_Registers.xml"
+      debug_target_connection="J-Link"
+      debug_threads_script="$(ProjectDir)/OS/Generic/embOSPlugin.js"
+      emCompress2Proj="Yes"
+      emCrypt2Proj="Yes"
+      emFile2Proj="Yes"
+      emFileLockLevel="Use single lock"
+      emModbus2Proj="Yes"
+      emSSH2Proj="Yes"
+      emSSL2Proj="Yes"
+      emSecure2Proj="Yes"
+      emUSBD2Proj="Yes"
+      emUSBH2Proj="No"
+      emWebSample="Full Bootstrap Website"
+      emWin2LogicalColor="ARGB"
+      emWin2Proj="Yes"
+      embOS2Proj="Yes"
+      embOS837070="No"
+      embOSIP2Proj="Yes"
+      gcc_enable_all_warnings="Yes"
+      gcc_entry_point="Reset_Handler"
+      link_linker_script_file="$(ProjectDir)/OS/Setup/GD32F450_GD32450I_Eval_Flash.icf"
+      linker_memory_map_file="$(ProjectDir)/OS/Setup/GD32F450IK_GD32450I_Eval_MemoryMap.xml"
+      linker_output_format="srec"
+      linker_printf_fmt_level="long"
+      linker_printf_fp_enabled="Yes"
+      linker_printf_width_precision_supported="Yes"
+      linker_scanf_fp_enabled="Yes"
+      project_directory=""
+      project_type="Executable"
+      target_reset_script="Reset();"
+      target_script_file="$(ProjectDir)/OS/Setup/GD32F4xx_Target.js" />
+    <configuration
+      IOTLibMode="Debug build (d)"
+      Name="Debug"
+      SEGGERLibMode="Debug build (d)"
+      arm_architecture="v7EM"
+      arm_core_type="Cortex-M4"
+      arm_endian="Little"
+      arm_fpu_type="FPv4-SP-D16"
+      arm_target_device_name="GD32F450IIH6"
+      c_preprocessor_definitions="DEBUG"
+      emCompressLibMode="Debug build (d)"
+      emCryptLibMode="Debug build (d)"
+      emFileLibMode="Debug build (d)"
+      emModbusLibMode="Debug build (d)"
+      emSSHLibMode="Debug build (d)"
+      emSSLLibMode="Debug build (d)"
+      emSecureLibMode="Debug build (d)"
+      emUSBDLibMode="Debug build (d)"
+      emUSBHLibMode="Debug build (d)"
+      emWinLibMode="Debug build (d)"
+      embOSIPLibMode="Debug build (d)"
+      embOSLibMode="Debug build with profiling (dp)"
+      gcc_debugging_level="Level 3"
+      gcc_optimization_level="None"
+      linker_section_placements_segments="FLASH1 RX 0x08000000 0x00100000;FLASH2 RX 0x08100000 0x00100000;RAM1 RWX 0x20000000 0x00030000;" />
+    <configuration
+      IOTLibMode="Release build (r)"
+      Name="Release"
+      SEGGERLibMode="Release build (r)"
+      c_preprocessor_definitions="NDEBUG"
+      emCompressLibMode="Release build (r)"
+      emCryptLibMode="Release build (r)"
+      emFileLibMode="Release build (r)"
+      emModbusLibMode="Release build (r)"
+      emSSHLibMode="Release build (r)"
+      emSSLLibMode="Release build (r)"
+      emSecureLibMode="Release build (r)"
+      emUSBDLibMode="Release build (r)"
+      emUSBHLibMode="Release build (r)"
+      emWinLibMode="Release build (r)"
+      embOSIPLibMode="Release build (r)"
+      embOSLibMode="Release build (r)"
+      gcc_debugging_level="Level 3"
+      gcc_optimization_level="Level 2" />
+    <folder Name="c_usb">
+      <file file_name="c_usb/cherryusb_yuyv.h" />
+      <file file_name="c_usb/usb_cdc.h" />
+      <file file_name="c_usb/usb_config.h" />
+      <file file_name="c_usb/usb_dc.h" />
+      <file file_name="c_usb/usb_dc_dwc2.c" />
+      <file file_name="c_usb/usb_dcache.h" />
+      <file file_name="c_usb/usb_def.h" />
+      <file file_name="c_usb/usb_dwc2_param.h" />
+      <file file_name="c_usb/usb_dwc2_reg.h" />
+      <file file_name="c_usb/usb_errno.h" />
+      <file file_name="c_usb/usb_glue_gd.c" />
+      <file file_name="c_usb/usb_hc.h" />
+      <file file_name="c_usb/usb_list.h" />
+      <file file_name="c_usb/usb_log.h" />
+      <file file_name="c_usb/usb_memcpy.h" />
+      <file file_name="c_usb/usb_osal.h" />
+      <file file_name="c_usb/usb_otg.h" />
+      <file file_name="c_usb/usb_util.h" />
+      <file file_name="c_usb/usb_version.h" />
+      <file file_name="c_usb/usb_video.h" />
+      <file file_name="c_usb/usbd_cdc.h" />
+      <file file_name="c_usb/usbd_core.c" />
+      <file file_name="c_usb/usbd_core.h" />
+      <file file_name="c_usb/usbd_video.c" />
+      <file file_name="c_usb/usbd_video.h" />
+      <file file_name="c_usb/video_static_yuyv_template.c" />
+    </folder>
+    <folder Name="FS">
+      <folder Name="Doc">
+        <file file_name="$(PackagesDir)/ESPRO/FS/Doc/Release_emFile.html">
+          <configuration Name="Common" file_open_with="Web Browser" />
+        </file>
+        <file file_name="$(PackagesDir)/ESPRO/FS/Doc/UM02001_emFile.pdf">
+          <configuration Name="Common" file_open_with="Web Browser" />
+        </file>
+      </folder>
+      <folder Name="Generic">
+        <file file_name="$(ProjectDir)/FS/Generic/FS_Conf.h" />
+        <file file_name="$(ProjectDir)/FS/Generic/FS_ConfigIO.c" />
+        <file file_name="$(ProjectDir)/FS/Generic/FS_OS_embOS.c" />
+      </folder>
+      <folder Name="Setup">
+        <file file_name="$(ProjectDir)/FS/Setup/FS_ConfigMMC_CM_GD32F450_GD_GD32450i_EVAL.c">
+          <configuration Name="Common" build_exclude_from_build="Yes" />
+        </file>
+        <file file_name="$(ProjectDir)/FS/Setup/FS_ConfigNAND_UNI_2048x8_GD32F450_GD_GD32450i_EVAL.c">
+          <configuration Name="Common" build_exclude_from_build="Yes" />
+        </file>
+        <file file_name="$(ProjectDir)/FS/Setup/FS_ConfigNOR_BM_ST_M25_GD32F450_GD_GD32450i_EVAL.c">
+          <configuration Name="Common" build_exclude_from_build="Yes" />
+        </file>
+        <file file_name="$(ProjectDir)/FS/Setup/FS_ConfigRAMDisk.c" />
+        <file file_name="$(ProjectDir)/FS/Setup/FS_ConfigRAMDisk_23KB.c">
+          <configuration Name="Common" build_exclude_from_build="Yes" />
+        </file>
+        <file file_name="$(ProjectDir)/FS/Setup/FS_MMC_HW_CM_GD32F450_GD_GD32450i_EVAL.c" />
+        <file file_name="$(ProjectDir)/FS/Setup/FS_MMC_HW_CM_GD32F450_GD_GD32450i_EVAL.h" />
+        <file file_name="$(ProjectDir)/FS/Setup/FS_NAND_HW_GD32F450_GD_GD32450i_EVAL.c" />
+        <file file_name="$(ProjectDir)/FS/Setup/FS_NAND_HW_GD32F450_GD_GD32450i_EVAL.h" />
+        <file file_name="$(ProjectDir)/FS/Setup/FS_NOR_HW_SPI_GD32F450_GD_GD32450i_EVAL.c" />
+        <file file_name="$(ProjectDir)/FS/Setup/FS_NOR_HW_SPI_GD32F450_GD_GD32450i_EVAL.h" />
+      </folder>
+    </folder>
+    <folder Name="GD32F4xx_Peripherals">
+      <configuration Name="Debug" build_exclude_from_build="Yes" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_adc.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_can.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_crc.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_ctc.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_dac.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_dbg.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_dci.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_dma.c">
+        <configuration Name="Debug" build_exclude_from_build="No" />
+      </file>
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_enet.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_exmc.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_exti.c">
+        <configuration Name="Debug" build_exclude_from_build="No" />
+      </file>
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_fmc.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_fwdgt.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_gpio.c">
+        <configuration Name="Debug" build_exclude_from_build="No" />
+      </file>
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_i2c.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_ipa.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_iref.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_misc.c">
+        <configuration Name="Debug" build_exclude_from_build="No" />
+      </file>
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_pmu.c">
+        <configuration Name="Debug" build_exclude_from_build="No" />
+      </file>
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_rcu.c">
+        <configuration Name="Debug" build_exclude_from_build="No" />
+      </file>
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_rtc.c">
+        <configuration Name="Debug" build_exclude_from_build="No" />
+      </file>
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_sdio.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_spi.c">
+        <configuration Name="Debug" build_exclude_from_build="No" />
+      </file>
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_syscfg.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_timer.c">
+        <configuration Name="Debug" build_exclude_from_build="No" />
+      </file>
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_tli.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_trng.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_usart.c" />
+      <file file_name="$(ProjectDir)/GD32F4xx_standard_peripheral/Source/gd32f4xx_wwdgt.c" />
+    </folder>
+    <folder Name="OS">
+      <folder Name="Doc">
+        <file file_name="$(PackagesDir)/ESPRO/OS/Doc/Release_embOS.html">
+          <configuration Name="Common" file_open_with="Web Browser" />
+        </file>
+        <file file_name="$(PackagesDir)/ESPRO/OS/Doc/Release_embOS_Classic_CortexM_ES.html">
+          <configuration Name="Common" file_open_with="Web Browser" />
+        </file>
+        <file file_name="$(PackagesDir)/ESPRO/OS/Doc/UM01001_embOS.pdf">
+          <configuration Name="Common" file_open_with="Web Browser" />
+        </file>
+        <file file_name="$(PackagesDir)/ESPRO/OS/Doc/UM01061_embOS_Classic_CortexM_ES.pdf">
+          <configuration Name="Common" file_open_with="Web Browser" />
+        </file>
+      </folder>
+      <folder Name="Generic">
+        <file file_name="$(ProjectDir)/OS/Generic/embOSPlugin.js" />
+        <file file_name="$(ProjectDir)/OS/Generic/HardFaultHandler.S" />
+        <file file_name="$(ProjectDir)/OS/Generic/JLINKMEM_Process.c" />
+        <file file_name="$(ProjectDir)/OS/Generic/OS_Error.c" />
+        <file file_name="$(ProjectDir)/OS/Generic/OS_ThreadSafe.c" />
+      </folder>
+      <folder Name="Setup">
+        <folder Name="CoreSupport">
+          <file file_name="$(ProjectDir)/OS/Setup/CoreSupport/cmsis_compiler.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/CoreSupport/cmsis_gcc.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/CoreSupport/cmsis_version.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/CoreSupport/core_cm4.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/CoreSupport/mpu_armv7.h" />
+        </folder>
+        <folder Name="DeviceSupport">
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f450_470_Vectors.s" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_adc.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_can.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_crc.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_ctc.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_dac.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_dbg.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_dci.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_dma.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_enet.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_exmc.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_exti.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_fmc.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_fwdgt.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_gpio.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_i2c.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_ipa.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_iref.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_libopt.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_misc.h">
+            <configuration Name="Debug" build_exclude_from_build="Yes" />
+          </file>
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_pmu.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_rcu.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_rtc.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_sdio.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_spi.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/GD32F4xx_Startup.s" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_syscfg.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_timer.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_tli.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_trng.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_usart.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/gd32f4xx_wwdgt.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/mcu.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/RTE_Components.h" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/system_gd32f4xx.c" />
+          <file file_name="$(ProjectDir)/OS/Setup/DeviceSupport/system_gd32f4xx.h" />
+        </folder>
+        <file file_name="$(ProjectDir)/OS/Setup/BSP.c" />
+        <file file_name="$(ProjectDir)/OS/Setup/BSP_Memory.c" />
+        <file file_name="$(ProjectDir)/OS/Setup/GD32F450_GD32450I_Eval_Flash.icf" />
+        <file file_name="$(ProjectDir)/OS/Setup/GD32F450IK_GD32450I_Eval_MemoryMap.xml" />
+        <file file_name="$(ProjectDir)/OS/Setup/GD32F4xx_Registers.xml" />
+        <file file_name="$(ProjectDir)/OS/Setup/GD32F4xx_Target.js" />
+        <file file_name="$(ProjectDir)/OS/Setup/RTOSInit_GD32.c" />
+        <file file_name="$(ProjectDir)/OS/Setup/SEGGER_RTT_Conf.h" />
+        <file file_name="$(ProjectDir)/OS/Setup/SEGGER_STOP_Handler.c" />
+        <file file_name="$(ProjectDir)/OS/Setup/SEGGER_SYSVIEW_Conf.h" />
+        <file file_name="$(ProjectDir)/OS/Setup/SEGGER_SYSVIEW_Config_embOS.c" />
+        <file file_name="$(ProjectDir)/OS/Setup/SEGGER_THUMB_Startup.s" />
+      </folder>
+    </folder>
+    <folder Name="SEGGER">
+      <file file_name="$(ProjectDir)/SEGGER/SEGGER_HardFaultHandler.c" />
+      <file file_name="$(ProjectDir)/SEGGER/SEGGER_RTT_ASM_ARMv7M.S" />
+      <file file_name="$(ProjectDir)/SEGGER/SEGGER_SYS.c" />
+      <file file_name="$(ProjectDir)/SEGGER/SEGGER_SYS_embOS.c" />
+      <file file_name="$(ProjectDir)/SEGGER/SEGGER_SYS_IO.c" />
+      <file file_name="$(ProjectDir)/SEGGER/SEGGER_SYS_IO_RTT.c" />
+      <file file_name="$(ProjectDir)/SEGGER/SEGGER_SYS_IP_embOSIP.c">
+        <configuration Name="Debug" build_exclude_from_build="Yes" />
+      </file>
+      <file file_name="$(ProjectDir)/SEGGER/SEGGER_SYS_OS_embOS.c" />
+      <file file_name="$(ProjectDir)/SEGGER/SEGGER_SYSVIEW.c" />
+      <file file_name="$(ProjectDir)/SEGGER/SEGGER_SYSVIEW_embOS.c" />
+    </folder>
+    <folder Name="uvc_app">
+      <file file_name="uvc_app/calibration_data.h" />
+      <file file_name="uvc_app/dm1716a_config.h" />
+      <file file_name="uvc_app/init.c" />
+      <file file_name="uvc_app/main.c" />
+      <file file_name="uvc_app/systick.c" />
+      <file file_name="uvc_app/systick.h" />
+    </folder>
+    <file file_name="$(PackagesDir)/ESPRO/Doc/LICENSE.html">
+      <configuration Name="Common" file_open_with="Web Browser" />
+    </file>
+    <file file_name="$(PackagesDir)/ESPRO/Doc/README_FirstSteps.html">
+      <configuration Name="Common" file_open_with="Web Browser" />
+    </file>
+  </project>
+</solution>

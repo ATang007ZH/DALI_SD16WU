@@ -1,0 +1,29 @@
+#ifndef __DM1716A_H__
+#define __DM1716A_H__
+
+#define HORIZONTAL_LENGTH (160)
+#define VERTICAL_LENGTH (120)
+#define HORIZONTAL_TIME_BASE_48M (HORIZONTAL_LENGTH + 20)
+#define VERTICAL_TIME_BASE_48M (VERTICAL_LENGTH + 1)
+
+#define INTERNAL_TEMP_INDEX (HORIZONTAL_LENGTH + 10)
+#define CAM_FPS        (15)
+
+// SD16WU
+#if (CAM_FPS == 14)
+#define PIXEL_INTERVAL_BASE_96M (630)
+#endif
+
+// SD16WG
+#if (CAM_FPS == 15)
+#define PIXEL_INTERVAL_BASE_96M (590)
+#endif
+
+// fastest
+#if (CAM_FPS == 25)
+#define PIXEL_INTERVAL_BASE_96M (354)
+#endif
+
+#define INTER_TEMP_TH (20)
+
+#endif

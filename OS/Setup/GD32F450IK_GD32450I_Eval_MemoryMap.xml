@@ -1,0 +1,7 @@
+<!DOCTYPE Board_Memory_Definition_File>
+<root name="GD32F450IK">
+  <MemorySegment name="FLASH1" start="0x08000000" size="0x00300000" access="ReadOnly" />
+  <MemorySegment name="TCM_RAM1" start="0x10000000" size="0x00010000" access="Read/Write" />
+  <MemorySegment name="RAM1" start="0x20000000" size="0x00030000" access="Read/Write" />
+  <MemorySegment name="SDRAM1" start="0xC0000000" size="0x02000000" access="Read/Write" />
+</root>
