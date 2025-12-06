@@ -21,44 +21,38 @@ int32_t last_second = 0;
 int32_t last_inter_temp = 0;
 int8_t need_adjust = 0;
 int8_t adjust_state = 0;
-float adc_avr_f4 = 0;
-uint32_t last_avr = 0;
-int32_t last_avr_f4 = 0;
+float calibrated_pixel_mean_f4 = 0;
+uint32_t last_calibrated_pixel_mean = 0;
 int32_t inter_temp_f4 = 0;
 int32_t inter_temp_f4_0 = 0;
-int16_t transformation_coefficient[5];
+int16_t segment_thresholds[5];
 int8_t get_noise_floor = 0;
-const float raw_coeff0[2] = {0.8133000135421753, 530.7265625};
-const float raw_coeff1[2] = {0.8356000185012817, 768.4443359375};
-const float raw_coeff2[2] = {0.840399980545044, 811.8818359375};
-const float raw_coeff3[2] = {0.84170001745224, 881.14306640625};
-const float raw_coeff4[2] = {0.8748000264167786, 1210.98779296875};
 
 void video_proc()
 {
     uint32_t i, j, inter_temp = adc_data[INTERNAL_TEMP_INDEX] >> 2;
 
-    uint32_t avr = 0;
+    uint32_t calibrated_pixel_mean = 0;
     for (j = 0; j < VERTICAL_LENGTH; j++)
     {
         for (i = 0; i < HORIZONTAL_LENGTH; i++)
         {
             uint32_t pixel_val = (uint32_t)adc_data[i + (j + 1) * HORIZONTAL_TIME_BASE_48M] * (uint32_t)FLAT_FIELD_CORRECTION[j][i] >> 16;
-            avr += pixel_val;
+            calibrated_pixel_mean += pixel_val;
             if (get_noise_floor)
             {
                 noise_floor[i + j * HORIZONTAL_LENGTH] = pixel_val;
             }
-            pixel_val = pixel_val - noise_floor[i + j * HORIZONTAL_LENGTH] + last_avr;
+            pixel_val = pixel_val - noise_floor[i + j * HORIZONTAL_LENGTH] + last_calibrated_pixel_mean;
             usb_send[i + j * HORIZONTAL_LENGTH] = temperature_map(pixel_val);
         }
         inter_temp = (inter_temp + (adc_data[INTERNAL_TEMP_INDEX + j * HORIZONTAL_TIME_BASE_48M] >> 2)) >> 1;
     }
-    avr /= (VERTICAL_LENGTH * HORIZONTAL_LENGTH);
+    calibrated_pixel_mean /= (VERTICAL_LENGTH * HORIZONTAL_LENGTH);
     if (get_noise_floor)
     {
         get_noise_floor = 0;
-        last_avr = avr;
+        last_calibrated_pixel_mean = calibrated_pixel_mean;
     }
     // 坏点
     usb_send[19 + 23 * HORIZONTAL_LENGTH] = usb_send[19 + 22 * HORIZONTAL_LENGTH];
@@ -91,6 +85,7 @@ void video_proc()
         switch (adjust_state)
         {
         case 0:
+            // 遮光, 采集底噪
             gpio_bit_set(GPIOE, 0x1000);
             // byte_20000469 = 0xFF;
             TIMER_CNT(TIMER6) = 0;
@@ -112,7 +107,7 @@ void video_proc()
             dma_periph_address_config(DMA1, 1, (uint32_t)word_20000412);
             dma_memory_address_config(DMA1, 1, 0, (uint32_t)&GPIO_OCTL(GPIOD));
             dma_channel_enable(DMA1, 1);
-            adc_avr_f4 = last_avr;
+            calibrated_pixel_mean_f4 = last_calibrated_pixel_mean;
             inter_temp_f4 = inter_temp;
             last_inter_temp = inter_temp;
             break;
@@ -125,11 +120,11 @@ void video_proc()
             {
                 inter_temp_f4_0 = 190.64f - inter_temp_f4 * 0.02164f;
             }
-            transformation_coefficient[0] = (raw_coeff0[1] + (raw_coeff0[0] * adc_avr_f4));
-            transformation_coefficient[1] = (raw_coeff1[1] + (raw_coeff1[0] * adc_avr_f4));
-            transformation_coefficient[2] = (raw_coeff2[1] + (raw_coeff2[0] * adc_avr_f4));
-            transformation_coefficient[3] = (raw_coeff3[1] + (raw_coeff3[0] * adc_avr_f4));
-            transformation_coefficient[4] = (raw_coeff4[1] + (raw_coeff4[0] * adc_avr_f4));
+            segment_thresholds[0] = (COEFF_B0 + (COEFF_K0 * calibrated_pixel_mean_f4));
+            segment_thresholds[1] = (COEFF_B1 + (COEFF_K1 * calibrated_pixel_mean_f4));
+            segment_thresholds[2] = (COEFF_B2 + (COEFF_K2 * calibrated_pixel_mean_f4));
+            segment_thresholds[3] = (COEFF_B3 + (COEFF_K3 * calibrated_pixel_mean_f4));
+            segment_thresholds[4] = (COEFF_B4 + (COEFF_K4 * calibrated_pixel_mean_f4));
             gpio_bit_set(GPIOE, 0x400);
             TIMER_CNT(TIMER6) = 0;
             TIMER_INTF(TIMER6) &= ~1;
@@ -162,7 +157,7 @@ void get_temperature_lut()
 
     for (i = 0; i < 8000; i++)
     {
-        v1 = piecewise_linear_transform((transformation_coefficient[0] + i - 300));
+        v1 = piecewise_linear_transform((segment_thresholds[0] + i - 300));
 #if 0
         if (sub_8007434(2u))
         {
@@ -193,58 +188,59 @@ float piecewise_linear_transform(int32_t result)
     float v8;
 
     v1 = 0.0f;
-    v2 = transformation_coefficient[1] - transformation_coefficient[0];
-    if (result < transformation_coefficient[0])
+    v2 = segment_thresholds[1] - segment_thresholds[0];
+    if (result < segment_thresholds[0])
     {
         v3 = v2 / 30.0f;
         if (v3 == 0.0f)
             return v1;
-        return (result - transformation_coefficient[0]) / v3;
+        return (result - segment_thresholds[0]) / v3;
     }
-    if (result >= transformation_coefficient[1])
+    if (result >= segment_thresholds[1])
     {
-        if (result < transformation_coefficient[2])
+        if (result < segment_thresholds[2])
         {
-            v4 = (transformation_coefficient[2] - transformation_coefficient[1]) / 5.0f;
+            v4 = (segment_thresholds[2] - segment_thresholds[1]) / 5.0f;
             if (v4 != 0.0f)
-                return ((result - transformation_coefficient[1]) / v4) + 30.0f;
+                return ((result - segment_thresholds[1]) / v4) + 30.0f;
             return v1;
         }
-        if (result >= transformation_coefficient[3])
+        if (result >= segment_thresholds[3])
         {
-            v8 = (transformation_coefficient[4] - transformation_coefficient[3]) / 30.0f;
-            if (result >= transformation_coefficient[4])
+            v8 = (segment_thresholds[4] - segment_thresholds[3]) / 30.0f;
+            if (result >= segment_thresholds[4])
             {
                 if (v8 != 0.0f)
-                    return ((result - transformation_coefficient[4]) / v8) + 70.0f;
+                    return ((result - segment_thresholds[4]) / v8) + 70.0f;
                 return v1;
             }
             if (v8 == 0.0f)
                 return v1;
-            v6 = (result - transformation_coefficient[3]) / v8;
+            v6 = (result - segment_thresholds[3]) / v8;
             v7 = 40.0f;
         }
         else
         {
-            v5 = (transformation_coefficient[3] - transformation_coefficient[2]);
+            v5 = (segment_thresholds[3] - segment_thresholds[2]);
             if ((v5 / 5.0f) == 0.0f)
                 return v1;
-            v6 = (result - transformation_coefficient[2]) / (v5 / 5.0f);
+            v6 = (result - segment_thresholds[2]) / (v5 / 5.0f);
             v7 = 35.0f;
         }
         return v6 + v7;
     }
     v3 = v2 / 30.0f;
     if (v3 != 0.0f)
-        return (result - transformation_coefficient[0]) / v3;
+        return (result - segment_thresholds[0]) / v3;
     return v1;
 }
+
 int temperature_map(uint32_t input)
 {
     uint32_t lut_index;
 
-    // lut_index = (a1 - transformation_coefficient[0] - flt_20000080 + 300);
-    lut_index = input + 300U - (uint32_t)transformation_coefficient[0];
+    // lut_index = (a1 - segment_thresholds[0] - flt_20000080 + 300);
+    lut_index = input + 300U - (uint32_t)segment_thresholds[0];
     if (lut_index > 7999)
         lut_index = 7999;
     if ((int)lut_index < 0)
@@ -346,6 +342,7 @@ void TIMER5_DAC_IRQHandler()
 }
 void TIMER6_IRQHandler()
 {
+    // 关闭电磁铁
     if ((TIMER_INTF(TIMER6) & 1) != 0)
     {
         TIMER_INTF(TIMER6) &= ~1;

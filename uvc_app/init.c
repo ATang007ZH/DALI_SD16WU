@@ -3,6 +3,8 @@
 #include "gd32f4xx.h"
 #include "systick.h"
 #include "dm1716a_config.h"
+#include "init_calibration_data.h"
+
 extern uint16_t adc_data[HORIZONTAL_TIME_BASE_48M * VERTICAL_TIME_BASE_48M + 1];
 void delay(int a1)
 {
@@ -403,16 +405,16 @@ void init_app()
                 spi_enable(SPI2);
             }
 
-            adjust_dac(0xc, (int)(0x53f * 1.515f)); // 3
+            adjust_dac(0xc, (int)(BIAS_VOLTAGE2 * 1.515f)); // 3
             delay(500);
-            adjust_dac(0xe, (int)(0x384 * 1.515f)); // 4
+            adjust_dac(0xe, (int)(BIAS_VOLTAGE3 * 1.515f)); // 4
             delay(500);
-            adjust_dac(0x8, (int)(0x8f7 * 1.515f)); // 2
+            adjust_dac(0x8, (int)(BIAS_VOLTAGE1 * 1.515f)); // 2
             delay(500);
-            adjust_dac(0xa, (int)(0x3e7 * 1.515f)); // 1
+            adjust_dac(0xa, (int)(BIAS_VOLTAGE0 * 1.515f)); // 1
             delay(500);
 
-            TIMER_CH0CV(TIMER1) = TIMER_CAR(TIMER1) - 30;
+            TIMER_CH0CV(TIMER1) = TIMER_CAR(TIMER1) - HORIZONTAL_SYNC_DELAY;
         }
         {     // sub_8005640
             { // sub_800648C
