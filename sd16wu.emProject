@@ -92,7 +92,7 @@
       embOSLibMode="Debug build with profiling (dp)"
       gcc_debugging_level="Level 3"
       gcc_optimization_level="None"
-      linker_section_placements_segments="FLASH1 RX 0x08000000 0x00100000;FLASH2 RX 0x08100000 0x00100000;RAM1 RWX 0x20000000 0x00030000;" />
+      linker_section_placements_segments="FLASH1 RX 0x08000000 0x00100000;APP_FLASH RX 0x08004000 0x00020000;FLASH2 RX 0x08100000 0x00100000;RAM1 RWX 0x20000000 0x00030000;" />
     <configuration
       IOTLibMode="Release build (r)"
       Name="Release"
@@ -111,7 +111,8 @@
       embOSIPLibMode="Release build (r)"
       embOSLibMode="Release build (r)"
       gcc_debugging_level="Level 3"
-      gcc_optimization_level="Level 2" />
+      gcc_optimization_level="Level 2"
+      linker_section_placements_segments="FLASH1 RX 0x08000000 0x00100000;APP_FLASH RX 0x08004000 0x00020000;FLASH2 RX 0x08100000 0x00100000;RAM1 RWX 0x20000000 0x00030000;" />
     <folder Name="c_usb">
       <file file_name="c_usb/cherryusb_yuyv.h" />
       <file file_name="c_usb/usb_cdc.h" />
