@@ -3,8 +3,10 @@
 #include <string.h>
 #include "gd32f4xx.h"
 #include "systick.h"
-#include "calibration_data.h"
 #include "dm1716a_config.h"
+
+// 平场校正数据起始地址
+#define FLAT_FIELD_FLASH_BASE   ((const uint8_t*)0x120024)
 
 void video_init(uint8_t busid, uintptr_t reg_base);
 void video_send(void *addr, uint32_t size);
@@ -28,6 +30,14 @@ int32_t inter_temp_f4_0 = 0;
 int16_t segment_thresholds[5];
 int8_t get_noise_floor = 0;
 
+// 从 Flash 小端读取 uint16（不依赖字节对齐）
+static inline uint16_t ffc_get(uint32_t row, uint32_t col)
+{
+    const uint8_t* base = FLAT_FIELD_FLASH_BASE;
+    uint32_t offset = (row * HORIZONTAL_LENGTH + col) * 2; // 每像素 2 字节
+    return (uint16_t)(base[offset] | (base[offset + 1] << 8));
+}
+
 void video_proc()
 {
     uint32_t i, j, inter_temp = adc_data[INTERNAL_TEMP_INDEX] >> 2;
@@ -37,7 +47,8 @@ void video_proc()
     {
         for (i = 0; i < HORIZONTAL_LENGTH; i++)
         {
-            uint32_t pixel_val = (uint32_t)adc_data[i + (j + 1) * HORIZONTAL_TIME_BASE_48M] * (uint32_t)FLAT_FIELD_CORRECTION[j][i] >> 16;
+            uint16_t ffc_gain = ffc_get(j, i);  // j=row, i=col
+            uint32_t pixel_val = ((uint32_t)adc_data[i + (j + 1) * HORIZONTAL_TIME_BASE_48M] * ffc_gain) >> 16;
             calibrated_pixel_mean += pixel_val;
             if (get_noise_floor)
             {
