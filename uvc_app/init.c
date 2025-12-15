@@ -1,9 +1,33 @@
+// === 新增：Flash 校准参数地址 ===
+#define CALIB_FLASH_BASE        ((const char*)0x100000)  // 校准头从 0x100000 开始
+#define BIAS_VOLTAGE0_ADDR      (CALIB_FLASH_BASE + 0x28)
+#define BIAS_VOLTAGE1_ADDR      (CALIB_FLASH_BASE + 0x2C)
+#define BIAS_VOLTAGE2_ADDR      (CALIB_FLASH_BASE + 0x30)
+#define BIAS_VOLTAGE3_ADDR      (CALIB_FLASH_BASE + 0x34)
+#define HSYNC_DELAY_ADDR        (CALIB_FLASH_BASE + 0x50)
+
+// === 新增：辅助转换函数 ===
+#include <string.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "gd32f4xx.h"
 #include "systick.h"
 #include "dm1716a_config.h"
-#include "init_calibration_data.h"
+
+// 将 4 字节 ASCII 十六进制字符串转 uint32（如 "1A2B" -> 0x1A2B）
+static uint32_t hex_str_to_u32(const char* s) {
+    char buf[5] = {0};
+    memcpy(buf, s, 4);
+    return (uint32_t)strtoul(buf, NULL, 16);
+}
+
+// 将 3 字节 ASCII 十进制字符串转 uint32（如 "123" -> 123）
+static uint32_t dec_str_to_u32(const char* s) {
+    char buf[4] = {0};
+    memcpy(buf, s, 3);
+    return (uint32_t)strtoul(buf, NULL, 10);
+}
 
 extern uint16_t adc_data[HORIZONTAL_TIME_BASE_48M * VERTICAL_TIME_BASE_48M + 1];
 void delay(int a1)
@@ -405,16 +429,25 @@ void init_app()
                 spi_enable(SPI2);
             }
 
-            adjust_dac(0xc, (int)(BIAS_VOLTAGE2 * 1.515f)); // 3
+            // 运行时从 Flash 读取偏置电压（ASCII 十六进制）
+            uint32_t bias0 = hex_str_to_u32(BIAS_VOLTAGE0_ADDR); // 对应 DAC 0xa
+            uint32_t bias1 = hex_str_to_u32(BIAS_VOLTAGE1_ADDR); // 对应 DAC 0x8
+            uint32_t bias2 = hex_str_to_u32(BIAS_VOLTAGE2_ADDR); // 对应 DAC 0xc
+            uint32_t bias3 = hex_str_to_u32(BIAS_VOLTAGE3_ADDR); // 对应 DAC 0xe
+
+            // 应用 DAC 设置（顺序与原代码一致）
+            adjust_dac(0xc, (int)(bias2 * 1.515f)); // 3
             delay(500);
-            adjust_dac(0xe, (int)(BIAS_VOLTAGE3 * 1.515f)); // 4
+            adjust_dac(0xe, (int)(bias3 * 1.515f)); // 4
             delay(500);
-            adjust_dac(0x8, (int)(BIAS_VOLTAGE1 * 1.515f)); // 2
+            adjust_dac(0x8, (int)(bias1 * 1.515f)); // 2
             delay(500);
-            adjust_dac(0xa, (int)(BIAS_VOLTAGE0 * 1.515f)); // 1
+            adjust_dac(0xa, (int)(bias0 * 1.515f)); // 1
             delay(500);
 
-            TIMER_CH0CV(TIMER1) = TIMER_CAR(TIMER1) - HORIZONTAL_SYNC_DELAY;
+            // 读取行同步延迟（ASCII 十进制）
+            uint32_t hsync_delay = dec_str_to_u32(HSYNC_DELAY_ADDR);
+            TIMER_CH0CV(TIMER1) = TIMER_CAR(TIMER1) - hsync_delay;
         }
         {     // sub_8005640
             { // sub_800648C
