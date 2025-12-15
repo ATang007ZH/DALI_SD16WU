@@ -267,6 +267,9 @@ int temperature_map(uint32_t input)
 */
 int main(void)
 {
+    /* 重定向中断向量表到 App 区域 (0x08000000 + 0x4000 = 0x08004000) */
+    nvic_vector_table_set(NVIC_VECTTAB_FLASH, 0x4000);
+    
     init_app();
 
     video_init(0, USBHS_BASE);
